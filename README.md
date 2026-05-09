@@ -101,3 +101,96 @@ El patron strategy permite definir diferentes formas de mover a los asteroides s
 - `object_factory.py`: fabrica de objetos del juego.
 - `event_manager.py`: gestion de eventos y observadores.
 - `movement_strategy.py`: estrategia de movimiento para asteroides.
+  ## Antipatrones Identificados (Código Original)
+
+*1. Importaciones de comodín (Star Imports)*
+python
+from pygame.locals import *
+from ship import *
+
+
+*2. Cargar recursos repetidamente desde el disco (I/O Bottleneck)*
+python
+# En Bullet.__init__ y Asteroid.__init__
+self.image=pygame.image.load("imagenes/bala.png")
+
+
+*3. Modificar una lista mientras se itera sobre ella*
+python
+for bullet in ship.bullets:
+    if bullet.alcance ==0:
+        ship.bullets.remove(bullet) # ¡Peligro!
+
+
+*4. Instanciar objetos pesados en el bucle principal*
+python
+while 1:
+    fuente=pygame.font.Font(None, 45)
+    fuente_go=pygame.font.Font(None,100)
+
+
+*5. Uso de while 1: en lugar de while True:*
+python
+while 1:
+    for event in pygame.event.get():
+
+
+*6. Inicialización de la clase padre a la antigua*
+python
+class Asteroid(Sprite):
+    def __init__(self, cont):
+        Sprite.__init__(self) # Antipatrón
+
+
+*7. Concatenación de cadenas anticuada*
+python
+texto_puntos=fuente.render("Puntos: "+str(ship.puntos),1,(250,250,250))
+
+
+*8. Control de FPS mediante retrasos (Delay)*
+python
+pygame.display.update()
+pygame.time.delay(10)
+
+
+*9. Comprobaciones redundantes en listas*
+python
+for asteroid in asteroids:
+    if asteroid in asteroids: # Redundante
+        asteroid.explotar()
+
+
+*10. Lógica de renderizado mezclada con lógica de actualización*
+python
+if asteroid.rect.colliderect(bullet.rect):
+    asteroid.explotar()
+    screen.blit(asteroid.image, asteroid.rect) # Lógica mezclada
+
+
+*11. Disparo sin tiempo de enfriamiento (Cooldown)*
+python
+elif teclas[K_SPACE]:
+    self.disparar() # Se ejecuta 60 veces por segundo
+
+
+*12. Números mágicos (Magic Numbers)*
+python
+if random.randint(0,100) % 25 == 0 and len(asteroids) < 10:
+
+
+*13. Ruptura del encapsulamiento*
+python
+if ship.rect.colliderect(asteroid.rect):
+    ship.vida -= 10
+
+
+*14. Efecto visual inútil (Condición de carrera visual)*
+python
+asteroid.explotar()
+screen.blit(asteroid.image, asteroid.rect)
+asteroids.remove(asteroid) # Borra la explosión al instante
+
+
+*15. Rutas de archivos fuertemente acopladas*
+python
+self.imagen_base=pygame.image.load("imagenes/nave.png")
