@@ -1,5 +1,7 @@
 # Asteroids Refactorizado
-
+- Juan Diego Céspedes Uribe - 20232020148
+- Juan David Bejarano Cristancho - 20232020056
+- Juan Camilo Rueda Leon - 20232020110
 ## Descripcion
 Este repositorio contiene una version refactorizada del juego "Asteroids" en Python y Pygame. El codigo se reorganizo para ser mas modular, legible y facil de extender.
 
