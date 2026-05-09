@@ -4,16 +4,16 @@
 Este repositorio contiene una version refactorizada del juego "Asteroids" en Python y Pygame. El codigo se reorganizo para ser mas modular, legible y facil de extender.
 
 ## Cambios principales realizados
-- Reemplace la logica monolitica de `asteroids.py` por un motor de juego basado en clases.
-- Separe la creacion de objetos en una fabrica con `ObjectFactory`.
-- Anade un `GameManager` singleton para controlar el estado global del juego.
-- Implemente un `GameState` con `PlayingState` y `GameOverState` para manejar fases del juego.
-- Anade un `EventManager` y un `ScoreObserver` para notificar eventos de colision.
-- Anade invulnerabilidad temporal al chocar con un asteroide.
-- Hice que el asteroide desaparezca cuando choca con la nave.
-- Mejore los controles para aceptar `A`, `W`, `D`, `SPACE` y tambien las flechas `LEFT`, `UP`, `RIGHT`.
-- Cambie el color del texto de vida a rojo cuando la vida es baja.
-- Refactorice componentes en archivos separados para mejorar el mantenimiento.
+- Se reemplazo la logica monolitica de `asteroids.py` por un motor de juego basado en clases.
+- Se señaro la creacion de objetos en una fabrica con `ObjectFactory`.
+- Se añidio un `GameManager` singleton para controlar el estado global del juego.
+- Se implemento un `GameState` con `PlayingState` y `GameOverState` para manejar fases del juego.
+- Se añadio un `EventManager` y un `ScoreObserver` para notificar eventos de colision.
+- Se añadio invulnerabilidad temporal al chocar con un asteroide.
+- Se hizo que el asteroide desaparezca cuando choca con la nave.
+- Se mejoraron los controles para aceptar `A`, `W`, `D`, `SPACE` y tambien las flechas `LEFT`, `UP`, `RIGHT`.
+- Se cambio el color del texto de vida a rojo cuando la vida es baja.
+- Se refactorizaron componentes en archivos separados para mejorar el mantenimiento.
 
 ## Patrones de diseno aplicados
 - **Singleton**: `GameManager` garantiza una unica instancia que controla el ciclo principal del juego.
@@ -99,18 +99,3 @@ El patron strategy permite definir diferentes formas de mover a los asteroides s
 - `object_factory.py`: fabrica de objetos del juego.
 - `event_manager.py`: gestion de eventos y observadores.
 - `movement_strategy.py`: estrategia de movimiento para asteroides.
-
-## Como ejecutar
-1. Activa el entorno virtual:
-   ```powershell
-   .\.venv\Scripts\Activate.ps1
-   ```
-2. Ejecuta el juego:
-   ```powershell
-   python asteroids.py
-   ```
-
-## Notas
-- Si la ventana no responde a los controles, asegurate de que este activa y con foco.
-- El texto de vida cambia a rojo cuando la vida baja de 30.
-- Si deseas ajustar el nivel de dificultad, puedes cambiar el numero maximo de asteroides y la frecuencia de aparicion en `game_state.py`.
