@@ -1,8 +1,12 @@
 import pygame
 import math
+from pathlib import Path
 from pygame.locals import *
 from pygame.sprite import Sprite
 from bullet import Bullet                
+
+BASE_DIR = Path(__file__).resolve().parent
+
 class Ship(Sprite):
     def __init__(self, contenedor, factory=None):
         self.puntos=0
@@ -16,15 +20,15 @@ class Ship(Sprite):
         self.factory = factory
         self.invulnerable = False
         self.invulnerable_timer = 0
-        self.imagen_base=pygame.image.load("imagenes/nave.png")
+        self.imagen_base=pygame.image.load(BASE_DIR / "imagenes" / "nave.png")
         self.imagen=self.imagen_base
         self.rect=self.imagen.get_rect()
         self.rect.move_ip(contenedor[0]/2, contenedor[1]/2)
 
     def init_sounds(self):
-        self.impulso=pygame.mixer.Sound("sonido/impulso.mp3")
+        self.impulso=pygame.mixer.Sound(BASE_DIR / "sonido" / "impulso.mp3")
         self.impulso.set_volume(0.05)
-        self.disparo=pygame.mixer.Sound("sonido/disparo.mp3")
+        self.disparo=pygame.mixer.Sound(BASE_DIR / "sonido" / "disparo.mp3")
         self.disparo.set_volume(0.05)
     def update(self):
         teclas = pygame.key.get_pressed()

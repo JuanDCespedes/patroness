@@ -1,5 +1,6 @@
 import pygame
 import sys
+from pathlib import Path
 from pygame.locals import *
 import random
 from ship import Ship
@@ -8,6 +9,8 @@ from bullet import Bullet
 from object_factory import ObjectFactory
 from event_manager import EventManager
 from game_state import GameState, PlayingState, GameOverState
+
+BASE_DIR = Path(__file__).resolve().parent
 
 class GameManager:
     _instance = None
@@ -30,11 +33,11 @@ class GameManager:
         pygame.init()
         pygame.mixer.init()
         self.screen = pygame.display.set_mode(self.size)
-        self.background_image = pygame.image.load("imagenes/space.png")
+        self.background_image = pygame.image.load(BASE_DIR / "imagenes" / "space.png")
         self.background_rect = self.background_image.get_rect()
         self.ship = Ship(self.size, self.factory)
         self.ship.init_sounds()
-        pygame.mixer.music.load("sonido/outer.mp3")
+        pygame.mixer.music.load(BASE_DIR / "sonido" / "outer.mp3")
         pygame.mixer.music.play(1)
         pygame.display.set_caption("Asteroids")
 
