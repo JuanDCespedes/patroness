@@ -101,7 +101,8 @@ El patron strategy permite definir diferentes formas de mover a los asteroides s
 - `object_factory.py`: fabrica de objetos del juego.
 - `event_manager.py`: gestion de eventos y observadores.
 - `movement_strategy.py`: estrategia de movimiento para asteroides.
-  ## Antipatrones Identificados (Código Original)
+
+## Antipatrones Identificados (Código Original)
 
 *1. Importaciones de comodín (Star Imports)*
 python
