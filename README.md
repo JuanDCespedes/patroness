@@ -112,7 +112,7 @@ from ship import *
 
 *2. Cargar recursos repetidamente desde el disco (I/O Bottleneck)*
 python
-# En Bullet.__init__ y Asteroid.__init__
+En Bullet.__init__ y Asteroid.__init__
 self.image=pygame.image.load("imagenes/bala.png")
 
 
