@@ -2,13 +2,14 @@
 - Juan Diego Céspedes Uribe - 20232020148
 - Juan David Bejarano Cristancho - 20232020056
 - Juan Camilo Rueda Leon - 20232020110
+
 ## Descripcion
 Este repositorio contiene una version refactorizada del juego "Asteroids" en Python y Pygame. El codigo se reorganizo para ser mas modular, legible y facil de extender.
 
 ## Cambios principales realizados
 - Se reemplazo la logica monolitica de `asteroids.py` por un motor de juego basado en clases.
-- Se señaro la creacion de objetos en una fabrica con `ObjectFactory`.
-- Se añidio un `GameManager` singleton para controlar el estado global del juego.
+- Se separo la creacion de objetos en una fabrica con `ObjectFactory`.
+- Se añadio un `GameManager` singleton para controlar el estado global del juego.
 - Se implemento un `GameState` con `PlayingState` y `GameOverState` para manejar fases del juego.
 - Se añadio un `EventManager` y un `ScoreObserver` para notificar eventos de colision.
 - Se añadio invulnerabilidad temporal al chocar con un asteroide.
@@ -25,6 +26,7 @@ Este repositorio contiene una version refactorizada del juego "Asteroids" en Pyt
 - **Strategy**: `MovementStrategy` permite definir comportamientos de movimiento intercambiables para los asteroides.
 
 ## Ejemplos de implementacion
+
 ### Singleton (`GameManager`)
 ```python
 class GameManager:
@@ -35,7 +37,6 @@ class GameManager:
             cls._instance = super(GameManager, cls).__new__(cls)
         return cls._instance
 ```
-Este patron asegura que solo exista una instancia de `GameManager` que controla la inicializacion y el ciclo principal.
 
 ### Factory (`ObjectFactory`)
 ```python
@@ -49,7 +50,6 @@ class ObjectFactory:
     def create_bullet(self, pos, angle, vel):
         return Bullet(pos, angle, vel, self.size)
 ```
-La fabrica desacopla la creacion de asteroides y balas de su uso en la logica del juego.
 
 ### State (`GameState`)
 ```python
@@ -60,7 +60,6 @@ class PlayingState(GameState):
         if self.game_manager.ship.vida <= 0:
             self.game_manager.change_state(GameOverState(self.game_manager))
 ```
-El patron state permite cambiar facilmente entre el estado de juego activo y el estado de game over.
 
 ### Observer (`EventManager`)
 ```python
@@ -71,13 +70,13 @@ class EventManager:
     def notify(self, event_type, data=None):
         ...
 ```
+
 ```python
 class ScoreObserver:
     def update(self, event_type, data):
         if event_type == "collision":
             print(f"Collision detected: {data}")
 ```
-Este patron notifica eventos de colision a los observadores registrados.
 
 ### Strategy (`MovementStrategy`)
 ```python
@@ -89,7 +88,105 @@ class RandomMovement(MovementStrategy):
     def move(self, obj):
         pass
 ```
-El patron strategy permite definir diferentes formas de mover a los asteroides sin cambiar su clase principal.
+
+---
+
+## Antipatrones Identificados (Código Original)
+
+**1. Importaciones de comodín (Star Imports)**
+```python
+from pygame.locals import *
+from ship import *
+```
+
+**2. Cargar recursos repetidamente desde el disco (I/O Bottleneck)**
+```python
+# En Bullet.__init__ y Asteroid.__init__
+self.image=pygame.image.load("imagenes/bala.png")
+```
+
+**3. Modificar una lista mientras se itera sobre ella**
+```python
+for bullet in ship.bullets:
+    if bullet.alcance ==0:
+        ship.bullets.remove(bullet) # ¡Peligro!
+```
+
+**4. Instanciar objetos pesados en el bucle principal**
+```python
+while 1:
+    fuente=pygame.font.Font(None, 45)
+    fuente_go=pygame.font.Font(None,100)
+```
+
+**5. Uso de `while 1:` en lugar de `while True:`**
+```python
+while 1:
+    for event in pygame.event.get():
+```
+
+**6. Inicialización de la clase padre a la antigua**
+```python
+class Asteroid(Sprite):
+    def __init__(self, cont):
+        Sprite.__init__(self) # Antipatrón
+```
+
+**7. Concatenación de cadenas anticuada**
+```python
+texto_puntos=fuente.render("Puntos: "+str(ship.puntos),1,(250,250,250))
+```
+
+**8. Control de FPS mediante retrasos (Delay)**
+```python
+pygame.display.update()
+pygame.time.delay(10)
+```
+
+**9. Comprobaciones redundantes en listas**
+```python
+for asteroid in asteroids:
+    if asteroid in asteroids: # Redundante
+        asteroid.explotar()
+```
+
+**10. Lógica de renderizado mezclada con lógica de actualización**
+```python
+if asteroid.rect.colliderect(bullet.rect):
+    asteroid.explotar()
+    screen.blit(asteroid.image, asteroid.rect) # Lógica mezclada
+```
+
+**11. Disparo sin tiempo de enfriamiento (Cooldown)**
+```python
+elif teclas[K_SPACE]:
+    self.disparar() # Se ejecuta 60 veces por segundo
+```
+
+**12. Números mágicos (Magic Numbers)**
+```python
+if random.randint(0,100) % 25 == 0 and len(asteroids) < 10:
+```
+
+**13. Ruptura del encapsulamiento**
+```python
+if ship.rect.colliderect(asteroid.rect):
+    ship.vida -= 10
+```
+
+**14. Efecto visual inútil (Condición de carrera visual)**
+```python
+asteroid.explotar()
+screen.blit(asteroid.image, asteroid.rect)
+asteroids.remove(asteroid) # Borra la explosión al instante
+```
+
+**15. Rutas de archivos fuertemente acopladas**
+```python
+self.imagen_base=pygame.image.load("imagenes/nave.png")
+```
+
+---
 
 ## Archivos relevantes
 - `asteroids.py`: punto de entrada del juego.
